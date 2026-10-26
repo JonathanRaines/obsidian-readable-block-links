@@ -14,6 +14,10 @@ This makes the block linking feature useful for references e.g.
 
 ## Install
 
+### Obsidian Community
+Visit the [Obsidian Community](https://community.obsidian.md/plugins/readable-block-links) page and press "Add to Obsidian"
+
+### From Source
 ```sh
 npm install
 npm run build
@@ -26,7 +30,7 @@ Copy `main.js` and `manifest.json` to `<vault>/.obsidian/plugins/readable-block-
 [MIT](LICENSE)
 
 ## Issues
-If you find a bug, please open an issue on the GitHub page.
+If you find a bug, please open an issue on the [GitHub page](https://github.com/jonathanraines/obsidian-readable-block-links/issues).
 
 ## AI Use
 Claude Code was used in the development of this plugin.
