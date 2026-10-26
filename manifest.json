@@ -1,7 +1,7 @@
 {
   "id": "readable-block-links",
   "name": "Readable Block Links",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "minAppVersion": "1.13.0",
   "description": "Replace generated block IDs with readable slugs based on the block's text.",
   "author": "Jonathan Raines",
