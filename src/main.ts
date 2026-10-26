@@ -1,4 +1,14 @@
-import { App, Editor, MarkdownFileInfo, MarkdownView, Plugin, PluginSettingTab, Setting, TFile, parseLinktext } from "obsidian";
+import {
+	App,
+	Editor,
+	MarkdownFileInfo,
+	MarkdownView,
+	Plugin,
+	PluginSettingTab,
+	SettingDefinitionItem,
+	TFile,
+	parseLinktext,
+} from "obsidian";
 import { SlugLimit, slugify, uniqueSlug } from "./slugify";
 
 // Obsidian generates block IDs as six lowercase alphanumerics.
@@ -19,7 +29,8 @@ export default class ReadableBlockLinks extends Plugin {
 	private seen = new Set<string>();
 
 	async onload() {
-		this.settings = { ...DEFAULT_SETTINGS, ...(await this.loadData()) };
+		const saved = (await this.loadData()) as Partial<Settings> | null;
+		this.settings = { ...DEFAULT_SETTINGS, ...saved };
 		if (!(this.settings.limit in LIMIT_OPTIONS)) this.settings.limit = DEFAULT_SETTINGS.limit;
 		this.addSettingTab(new ReadableBlockLinksSettingTab(this.app, this));
 		this.registerEvent(this.app.workspace.on("editor-change", (editor, info) => this.onEditorChange(editor, info)));
@@ -114,32 +125,32 @@ class ReadableBlockLinksSettingTab extends PluginSettingTab {
 		super(app, plugin);
 	}
 
-	display() {
-		const { settings } = this.plugin;
-		this.containerEl.empty();
-		new Setting(this.containerEl)
-			.setName("Limit")
-			.setDesc("How much of the block to use for the slug.")
-			.addDropdown((dropdown) =>
-				dropdown
-					.addOptions(LIMIT_OPTIONS)
-					.setValue(settings.limit)
-					.onChange(async (value) => {
-						settings.limit = value as SlugLimit;
-						await this.plugin.saveData(settings);
-						this.display();
-					}),
-			);
-		const { limit } = settings;
-		if (limit === "none") return;
-		new Setting(this.containerEl).setName(`Number of ${limit}`).addText((text) =>
-			text.setValue(String(settings[limit])).onChange(async (value) => {
-				const n = parseInt(value, 10);
-				if (n > 0) {
-					settings[limit] = n;
-					await this.plugin.saveData(settings);
-				}
-			}),
-		);
+	getSettingDefinitions(): SettingDefinitionItem[] {
+		const count = (limit: "words" | "sentences"): SettingDefinitionItem => ({
+			name: `Number of ${limit}`,
+			visible: () => this.plugin.settings.limit === limit,
+			control: {
+				type: "number",
+				key: limit,
+				defaultValue: DEFAULT_SETTINGS[limit],
+				min: 1,
+				step: 1,
+				validate: (n) => (Number.isInteger(n) && n > 0 ? undefined : "Enter a whole number of 1 or more."),
+			},
+		});
+		return [
+			{
+				name: "Limit",
+				desc: "How much of the block to use for the slug.",
+				control: { type: "dropdown", key: "limit", options: LIMIT_OPTIONS },
+			},
+			count("words"),
+			count("sentences"),
+		];
+	}
+
+	async setControlValue(key: string, value: unknown) {
+		await super.setControlValue(key, value);
+		this.refreshDomState(); // show the count box matching the chosen limit
 	}
 }
