@@ -1,0 +1,20 @@
+import { test } from "node:test";
+import assert from "node:assert/strict";
+import { slugify, uniqueSlug } from "./slugify.ts";
+
+test("quote", () => assert.equal(slugify('> "Some quote"'), "some-quote"));
+test("strips block id", () => assert.equal(slugify("Some text ^abc123"), "some-text"));
+test("standalone block id line", () => assert.equal(slugify("> quote\n\n^abc123"), "quote"));
+test("list task", () => assert.equal(slugify("- [x] Buy milk"), "buy-milk"));
+test("callout", () => assert.equal(slugify("> [!note] Key idea\n> body"), "key-idea-body"));
+test("links", () => assert.equal(slugify("See [[Note|this]] and [that](x.md)"), "see-this-and-that"));
+test("diacritics", () => assert.equal(slugify("Café über"), "cafe-uber"));
+test("first sentence", () => assert.equal(slugify("First one here. Second one."), "first-one-here"));
+test("sentence ends inside quote", () => assert.equal(slugify('"Hi there!" she said.'), "hi-there"));
+test("decimal is not a sentence end", () => assert.equal(slugify("Pi is 3.14 roughly"), "pi-is-3-14-roughly"));
+test("two sentences", () => assert.equal(slugify("One. Two! Three.", "sentences", 2), "one-two"));
+test("fewer sentences than count", () => assert.equal(slugify("Only one", "sentences", 3), "only-one"));
+test("word limit ignores sentences", () => assert.equal(slugify("one. two three", "words", 2), "one-two"));
+test("whole block", () => assert.equal(slugify("One. Two.\nThree", "none"), "one-two-three"));
+test("no usable text", () => assert.equal(slugify("> 日本語"), ""));
+test("unique", () => assert.equal(uniqueSlug("a", ["a", "A-2"]), "a-3"));
