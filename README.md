@@ -1,6 +1,8 @@
 # Readable Block Links
 
-When you link to a block with Obsidian's suggester (`[[Note#^`), Obsidian creates a random ID like `^abc123`. This plugin replaces that ID with a slug made from the start of the block. It updates both the source note and the link.
+When you link to a block with Obsidian's suggester (`[[Note#^`), Obsidian creates an ID like `^abc123`. This plugin replaces that ID with a slug made from the start of the block. It updates both the source note and the link.
+
+This makes the block linking feature useful for references e.g. 
 
 ```markdown
 [[Source note#^abc123]]  →  [[Source note#^some-quote]]
@@ -18,3 +20,13 @@ npm run build
 ```
 
 Copy `main.js` and `manifest.json` to `<vault>/.obsidian/plugins/readable-block-links/`, then enable the plugin under Settings → Community plugins.
+
+## License
+
+[MIT](LICENSE)
+
+## Issues
+If you find a bug, please open an issue on the GitHub page.
+
+## AI Use
+Claude Code was used in the development of this plugin.

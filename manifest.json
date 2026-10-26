@@ -3,7 +3,8 @@
   "name": "Readable Block Links",
   "version": "1.0.0",
   "minAppVersion": "1.4.0",
-  "description": "Replaces generated block IDs with readable slugs taken from the start of the block.",
+  "description": "Replace generated block IDs with readable slugs based on the block's text.",
   "author": "Jonathan Raines",
+  "authorUrl": "https://jonathanraines.github.io/",
   "isDesktopOnly": false
 }

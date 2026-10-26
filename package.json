@@ -1,7 +1,7 @@
 {
   "name": "obsidian-readable-block-links",
   "version": "1.0.0",
-  "description": "Replaces generated block IDs with readable slugs taken from the start of the block.",
+  "description": "Replace generated block IDs with readable slugs based on the block's text.",
   "main": "main.js",
   "type": "module",
   "scripts": {
@@ -9,6 +9,7 @@
     "build": "tsc --noEmit && node esbuild.config.mjs production",
     "test": "node --test src/*.test.ts"
   },
+  "author": "Jonathan Raines",
   "license": "MIT",
   "engines": {
     "node": ">=18"
